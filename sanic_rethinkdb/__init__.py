@@ -2,7 +2,6 @@ import os
 import asyncio
 
 from functools import partial
-from collections import defaultdict
 
 import rethinkdb as r
 
@@ -19,15 +18,7 @@ class RethinkDB:
         if app is not None:
             self.init_app(app)
 
-    async def connection(self):
-        pid = os.getpid()
-        if pid in self._connections:
-            return self._connections[pid]
-        else:
-            connection = await self._connection_maker()
-            return self._connections.setdefault(pid, connection)
-
-    def init_app(self, app):
+    def init_app(self, app, **kwargs):
         app.config.setdefault('RETHINKDB_HOST', 'localhost')
         app.config.setdefault('RETHINKDB_PORT', '28015')
         app.config.setdefault('RETHINKDB_AUTH', '')
@@ -43,3 +34,14 @@ class RethinkDB:
                                          host=app.config.RETHINKDB_HOST,
                                          port=app.config.RETHINKDB_PORT,
                                          db=app.config.RETHINKDB_DB)
+
+    async def connection(self):
+        pid = os.getpid()
+        if pid in self._connections:
+            return self._connections[pid]
+        else:
+            connection = await self._connection_maker()
+            return self._connections.setdefault(pid, connection)
+
+    async def __aenter__(self):
+        return await self.connection()
