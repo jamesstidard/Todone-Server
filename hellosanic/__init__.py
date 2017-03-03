@@ -7,9 +7,10 @@ from hellosanic.websocket import on_connect
 rethinkdb = RethinkDB()
 
 
-def create_app():
+def create_app(config):
     app = Sanic(__name__)
-    app.config.LOGO = ''
+    app.config.from_object(config)
+    app.config.db = rethinkdb
 
     rethinkdb.init_app(app)
 

@@ -1,3 +1,5 @@
 rethinkdb
-pytest==3.0.6
+pytest
+sanic_rethinkdb
+sanic_envconfig
 -e git://github.com/miguelgrinberg/sanic.git@websocket-support#egg=Sanic
