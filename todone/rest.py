@@ -3,26 +3,24 @@ from sanic.response import json
 
 import rethinkdb as r
 
-from ..websocket import WebSocketClients
+from todone.websocket import WebSocketClients
 
 
 rest = Blueprint('rest', url_prefix='/rest')
 
 
-@rest.get('/<resource>')
+@rest.get('/<resource:str>')
 async def select(request, resource: str):
     # unwrap arg values from array for filter predicate
-    # TODO: also filter is type sensitive so try both floats, ints and strings
     predicate = {k: v[0] for k, v in request.args.items()}
 
-    conn   = await request.app.config.db.connection()
+    conn   = request.app.rdb_connection
     cursor = await r.table(resource).filter(predicate).run(conn)
 
     resources = []
     while await cursor.fetch_next():
         resources.append(await cursor.next())
 
-    await WebSocketClients.broadcast('selecting')
     return json(resources)
 
 

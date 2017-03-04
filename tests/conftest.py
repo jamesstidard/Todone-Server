@@ -1,6 +1,6 @@
 import pytest
 
-from hellosanic import create_app
+from todone import create_app
 
 
 @pytest.fixture

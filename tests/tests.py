@@ -2,7 +2,7 @@ import pytest
 import aiohttp
 import asyncio
 import rethinkdb as r
-from hellosanic import rethinkdb
+from todone import rethinkdb
 
 
 @pytest.mark.asyncio
@@ -14,7 +14,7 @@ async def test_row_inset(app):
 
 
 async def fetch(session, url):
-    with aiohttp.Timeout(10, loop=session.loop):
+    with aiohttp.Timeout(100, loop=session.loop):
         async with session.get(url) as response:
             return await response.text()
 
