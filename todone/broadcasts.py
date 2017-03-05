@@ -24,7 +24,8 @@ async def server_to_server_broadcasts(app):
     msg = asynqp.Message({'hello': 'world'})
     exchange.publish(msg, 'routing.key')
 
-    async for message in queue.get():
+    while True:
+        message = await queue.get()
         print(message.json())
         message.ack()
 
