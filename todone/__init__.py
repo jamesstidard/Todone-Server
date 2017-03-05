@@ -8,7 +8,7 @@ from todone.rest import rest
 from todone.model import SCHEMA
 from todone.websocket import on_connect, WebSocketClients
 from todone.broadcasts import subscribe_and_broadcast
-from todone.utils.async_helpers import wait
+from todone.utils import wait
 
 
 def create_app(config):
