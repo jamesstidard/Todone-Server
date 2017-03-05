@@ -1,5 +1,5 @@
 # todo.ne server
-A work-in-progress Sanic stack based on blueshed.micro
+A work-in-progress Sanic app based on blueshed.micro
 
 ## Todos
 - [ ] Interprocess and server instance communication
