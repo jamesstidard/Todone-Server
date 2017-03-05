@@ -14,7 +14,7 @@ class WebSocketClients:
     # Clients are managed as a linked list
     # unauthed clients stored as hash(websocket): None
     # auths clients have two entries hash(websocket): user_uuid and user_id: websocket for quick access
-    __clients = Manager().dict()
+    __clients = {}
 
     @classmethod
     def add(cls, client, *, user_uuid=None):
@@ -58,12 +58,12 @@ class WebSocketClients:
 
 
 async def on_connect(request, ws):
-    WebSocketClients.add(ws)
+    request.app.websocket_clients.add(ws)
     while True:
         try:
             message = await ws.recv()
         except ConnectionClosed:
-            WebSocketClients.remove(ws)
+            request.app.websocket_clients.remove(ws)
             break
 
         if message.startswith('select_'):

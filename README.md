@@ -8,3 +8,5 @@ A work-in-progress Sanic stack based on blueshed.micro
 - [ ] WebSocket Client Lodger with broadcast
 - [ ] Login and access control
 - [ ] Rest handlers
+- [ ] Secure cookies
+- [ ] WebSocket cookies
