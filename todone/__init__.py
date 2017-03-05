@@ -1,11 +1,14 @@
+import asyncio
+
 from sanic import Sanic
 from sanic_rethinkdb import RethinkDB
 
 from todone.rpc import rpc
 from todone.rest import rest
+from todone.model import SCHEMA
 from todone.websocket import on_connect, WebSocketClients
 from todone.listeners import listen_for_db_changes
-from todone.model import TABLES
+from todone.utils.async_helpers import wait
 
 
 def create_app(config):
@@ -14,10 +17,8 @@ def create_app(config):
 
     rethinkdb = RethinkDB(app)
 
-    # TODO: must only run on single process
-    if (app.config.DROP_REMAKE_DB
-    and input('Really drop the DB? (y/N)').lower() == 'y'):
-        app.add_task(rethinkdb.drop_and_remake(TABLES))
+    if app.config.DROP_REMAKE_DB and input('Really drop the DB? (y/N)').lower() == 'y':
+        wait(rethinkdb.drop_and_remake(SCHEMA))
 
     app.blueprint(rpc)
     app.blueprint(rest)
