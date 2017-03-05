@@ -2,4 +2,5 @@ rethinkdb
 pytest
 sanic_rethinkdb
 sanic_envconfig
+asynqp
 -e git://github.com/miguelgrinberg/sanic.git@websocket-support#egg=Sanic

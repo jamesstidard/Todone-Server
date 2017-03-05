@@ -7,7 +7,7 @@ from todone.rpc import rpc
 from todone.rest import rest
 from todone.model import SCHEMA
 from todone.websocket import on_connect, WebSocketClients
-from todone.listeners import listen_for_db_changes
+from todone.broadcasts import subscribe_and_broadcast
 from todone.utils.async_helpers import wait
 
 
@@ -30,6 +30,6 @@ def create_app(config):
         # Per process specific setup
         app_.rdb_connection = await rethinkdb.connection()
         app_.websocket_clients = WebSocketClients()
-        loop.create_task(listen_for_db_changes(app_))
+        loop.create_task(subscribe_and_broadcast(app_))
 
     return app
